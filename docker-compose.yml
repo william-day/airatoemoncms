@@ -1,0 +1,18 @@
+version: '3.8'
+services:
+    airatoemoncms_app:
+        build:
+            context: .
+            dockerfile: Dockerfile
+        container_name: airatoemoncms_app
+        volumes:
+          - ./app:/app  # Mount the application code for live updates
+          - /etc/localtime:/etc/localtime:ro  # Mount host's localtime (read-only)
+        environment:
+            - AIRA_UUID="dfsdf"
+            - EMONCMS_URL="http://192.168.0.11:8081/input/post"
+            - EMONCMS_APIKEY="8d4da0f121e2ba2816cdc0d6dcbb7a8b"
+            - EMONCMS_NODE="AIRAHEATPUMP"
+        working_dir: /app
+        command: python3 airatoemoncms.py
+        restart: always
