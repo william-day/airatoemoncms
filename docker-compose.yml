@@ -1,18 +1,21 @@
-version: '3.8'
 services:
-    airatoemoncms_app:
+    app:
         build:
             context: .
             dockerfile: Dockerfile
         container_name: airatoemoncms_app
         volumes:
-          - ./app:/app  # Mount the application code for live updates
           - /etc/localtime:/etc/localtime:ro  # Mount host's localtime (read-only)
+          - /var/run/dbus/:/var/run/dbus/:z
         environment:
-            - AIRA_UUID="dfsdf"
-            - EMONCMS_URL="http://192.168.0.11:8081/input/post"
-            - EMONCMS_APIKEY="8d4da0f121e2ba2816cdc0d6dcbb7a8b"
-            - EMONCMS_NODE="AIRAHEATPUMP"
-        working_dir: /app
-        command: python3 airatoemoncms.py
-        restart: always
+            - AIRA_UUID=xxx # populate with Aira Heat Pump UUID
+            - AIRA_DHW_TARGET_TEMP=55 # populate with DHW target temp as configured in Aira app
+            - EMONCMS_UPLOAD_MAXRETRIES=5 # before restarting the container
+            - EMONCMS_UPLOAD_WAITTIME=5 # time between BLE reads (in seconds) excluding time to read and post data
+            - EMONCMS_URL=https://emoncms.org/input/post
+            - EMONCMS_APIKEY=xxx # populate with your EmonCMS write API key
+            - EMONCMS_NODE=AiraHeatPump
+        command: python airatoemoncms.py 
+        privileged: true
+        restart: "always"
+

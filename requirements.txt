@@ -1,1 +1,1 @@
-pyairahome==2.0.7
+pyairahome==2.0.8
