@@ -8,12 +8,12 @@ services:
           - /etc/localtime:/etc/localtime:ro  # Mount host's localtime (read-only)
           - /var/run/dbus/:/var/run/dbus/:z
         environment:
-            - AIRA_UUID=xxx # populate with Aira Heat Pump UUID
-            - AIRA_DHW_TARGET_TEMP=55 # populate with DHW target temp as configured in Aira app
+            - AIRA_UUID=4d3b014a-e4d5-4aab-91aa-637efef6d858 # populate with Aira Heat Pump UUID
+            - AIRA_DHW_TARGET_TEMP=50 # populate with DHW target temp as configured in Aira app
             - EMONCMS_UPLOAD_MAXRETRIES=5 # before restarting the container
             - EMONCMS_UPLOAD_WAITTIME=5 # time between BLE reads (in seconds) excluding time to read and post data
             - EMONCMS_URL=https://emoncms.org/input/post
-            - EMONCMS_APIKEY=xxx # populate with your EmonCMS write API key
+            - EMONCMS_APIKEY=54306052730bb778f1c5cdb325e39f4b # populate with your EmonCMS write API key
             - EMONCMS_NODE=AiraHeatPump
         command: python airatoemoncms.py 
         privileged: true
