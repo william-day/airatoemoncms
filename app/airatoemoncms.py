@@ -15,6 +15,7 @@ EMONCMS_APIKEY = os.environ.get('EMONCMS_APIKEY')
 EMONCMS_NODE = os.environ.get('EMONCMS_NODE')
 
 logger = logging.getLogger(__name__)
+# This is going to burn disk space, revert to INFO once stable
 logger.setLevel(logging.DEBUG)
 
 
@@ -30,23 +31,23 @@ def process_to_emoncms_format(additional):
     deltaT = additional['sensor_values']['outdoor_unit_supply_temperature'] - additional['sensor_values']['outdoor_unit_return_temperature']
     flowRate = additional['sensor_values']['flow_meter1']
     heatpump_heat = calc_heatpump_heat(deltaT, flowRate)
-
-    heatpump_dhw = 0
-    heatpump_ch = 0
-    
+  
+    # In theory the immmersion heater can also do central heating but unlikely
     immersion_elec = 0
     if additional['inline_heater_status']['is_active']:
         immersion_elec = additional['energy_calculation']['current_electrical_power_w']
         heatpump_heat = additional['energy_calculation']['current_electrical_power_w']
 
-    if additional['megmet_status']['requested_state'] or additional['megmet_status']['current_operation_mode']: # REALLY NEEDS MORE THOUGHT
+    heatpump_dhw = 0
+    heatpump_ch = 0
+    # Catch-all to see if heatpump is running for DHW or CH
+    # If this fails, might resort to using flow rate > 0
+    if additional['megmet_status']['requested_state'] or additional['megmet_status']['current_operation_mode'] or immersion_elec:
         if additional['valve_status']['dhw_heating_cooling_valve'] == 'POSITION_DHW':
             heatpump_dhw = 1
         else:
             heatpump_ch = 1
-    elif immersion_elec > 0:
-        heatpump_dhw = 1
-        
+
     emoncms_format = {
         'heatpump_elec': additional['energy_calculation']['current_electrical_power_w'],
         'heatpump_heat': heatpump_heat,
@@ -89,6 +90,7 @@ def main():
     # Initialize the library
     aira = AiraHome()
     
+    logger.info(f"Connecting to AIRA device with UUID: {AIRA_UUID}")
     connected = aira.ble.connect_uuid(AIRA_UUID)
     
     if connected:
@@ -97,6 +99,7 @@ def main():
         while True:
             try:
                 additional = aira.ble.get_system_check_state()
+                logger.debug(f"AIRA State: {json.dumps(additional)}")
                 emoncms_format = process_to_emoncms_format(additional['system_check_state'])
                 upload_to_emoncms(emoncms_format)
                 bad_tries = 0
@@ -107,14 +110,14 @@ def main():
                 aira.ble.connect() # reconnect
 
                 bad_tries += 1
-                logging.warning(f"Exception {e} occurred - count of bad tries: {bad_tries}")
+                logger.warning(f"Exception {e} occurred - count of bad tries: {bad_tries}")
                 if bad_tries > EMONCMS_UPLOAD_MAXRETRIES:
                     logger.critical("Too many failures - exiting")
                     exit(1)
 
             except Exception as e:
                 bad_tries += 1
-                logging.warning(f"Exception {e} occurred - count of bad tries: {bad_tries}")
+                logger.warning(f"Exception {e} occurred - count of bad tries: {bad_tries}")
                 if bad_tries > EMONCMS_UPLOAD_MAXRETRIES:
                     logger.critical("Too many failures - exiting")
                     exit(1)
