@@ -1,6 +1,6 @@
 ## Description
 
-This is a lightweight application which used pyairahome libary to pull Aira heatpump performance data via BLE and export to one or more instances of Emoncms.
+This is a lightweight application which uses [pyairahome libary](https://github.com/Invy55/pyairahome) to pull Aira heatpump performance data via BLE and export to one or more instances of Emoncms.
 
 Each instances may have different mappings for attributes, which can be useful when one has a local and cloud running instances.
 
@@ -63,5 +63,32 @@ sudo docker-compose up --build -d
 
 Newer versions would be `docker compose` but example assumes default package in Ubuntu 24.04.
 
+### Updates
+
+If app is updated, rebuild the container as follows.
+
+```bash
+ sudo docker-compose down
+ sudo docker-compose up --build --remove-orphans -d
+```
+
 ## Disclaimer
 
+### The app uses pyairahome library with the following disclaimer
+
+**PyAiraHome** is an independent, open-source software library developed for interacting with Aira Home heat pumps via their app gRPC APIs and Bluetooth Low Energy protocols. This project is **not affiliated with, endorsed by, sponsored by, or associated with** Aira Home or any of its subsidiaries, affiliates, or partners.
+
+#### Important Legal Notice
+
+- 🔒 This project is **not an official product** of Aira Home
+- ⚖️ Use of this library does **not imply any compatibility, support, or approval** from Aira Home
+- 🏷️ All trademarks, service marks, and company names mentioned herein are the **property of their respective owners**
+- ⚠️ **Use of this library is at your own risk** - I'm not responsible for any damages, malfunctions, warranty voids, or issues arising from its use
+- 🛡️ This software is provided **"AS IS"** without warranty of any kind, express or implied
+- 🔍 No proprietary code, trade secrets, or copyrighted materials from Aira Home have been used in the development of this library.
+
+**By using this library, you acknowledge that you understand and accept these terms and any associated risks.**
+
+### This app
+
+dgsfdg
