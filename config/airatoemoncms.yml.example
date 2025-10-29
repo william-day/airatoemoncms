@@ -1,0 +1,132 @@
+settings:
+  dhw_target_temp: 55  # changeme - populate with DHW target temp as configured in Aira app
+  aira_uuid: SCAN  # changeme - populate with Aira Heat Pump UUI
+  scan_interval: 10  # in seconds
+  retries_before_restart: 5
+  
+
+# Multiple destination entries can be added
+destination:
+  - url: https://emoncms.org/input/post
+    api_key: <CHANGEME> # populate with your Emoncms API key
+    group: AiraHeatPump # Adjust if desired
+    export_rule: minimal
+    timeout: 3
+
+
+# No need to edit below this line unless you want to customise export rules
+export_rules:
+  minimal:
+    heatpump_elec: system_check_state/energy_calculation/current_electrical_power_w
+    heatpump_heat: calculated_values/heating_power
+    heatpump_flowT: system_check_state/sensor_values/outdoor_unit_supply_temperature
+    heatpump_returnT: system_check_state/sensor_values/outdoor_unit_return_temperature
+    heatpump_outsideT: system_check_state/sensor_values/outdoor_unit_ambient_temperature
+    heatpump_roomT: system_check_state/sensor_values/indoor_unit_room_temperature_zone1
+    heatpump_targetT: system_check_state/calculated_setpoints/temp_room1
+    heatpump_flowrate: system_check_state/sensor_values/flow_meter1
+    heatpump_dhw: calculated_values/heatpump_dhw
+    heatpump_ch: calculated_values/heatpump_ch
+    heatpump_dhwT: system_check_state/sensor_values/indoor_unit_dhw_tank_temperature
+    heatpump_dhwTargetT: calculated_values/dhw_target_temperature
+    immersion_elec: calculated_values/immersion_elec
+  minimal_plus_buffer:
+    heatpump_elec: system_check_state/energy_calculation/current_electrical_power_w
+    heatpump_heat: calculated_values/heating_power
+    heatpump_flowT: system_check_state/sensor_values/outdoor_unit_supply_temperature
+    heatpump_returnT: system_check_state/sensor_values/outdoor_unit_return_temperature
+    heatpump_outsideT: system_check_state/sensor_values/outdoor_unit_ambient_temperature
+    heatpump_roomT: system_check_state/sensor_values/indoor_unit_room_temperature_zone1
+    heatpump_targetT: system_check_state/calculated_setpoints/temp_room1
+    heatpump_flowrate: system_check_state/sensor_values/flow_meter1
+    heatpump_dhw: calculated_values/heatpump_dhw
+    heatpump_ch: calculated_values/heatpump_ch
+    heatpump_dhwT: system_check_state/sensor_values/indoor_unit_dhw_tank_temperature
+    heatpump_dhwTargetT: calculated_values/dhw_target_temperature
+    immersion_elec: calculated_values/immersion_elec
+    heatpump_bufferT: system_check_state/sensor_values/indoor_unit_supply_temperature
+  minimal_plus_buffer_and_energy_balance:
+    heatpump_elec: system_check_state/energy_calculation/current_electrical_power_w
+    heatpump_heat: calculated_values/heating_power
+    heatpump_flowT: system_check_state/sensor_values/outdoor_unit_supply_temperature
+    heatpump_returnT: system_check_state/sensor_values/outdoor_unit_return_temperature
+    heatpump_outsideT: system_check_state/sensor_values/outdoor_unit_ambient_temperature
+    heatpump_roomT: system_check_state/sensor_values/indoor_unit_room_temperature_zone1
+    heatpump_targetT: system_check_state/calculated_setpoints/temp_room1
+    heatpump_flowrate: system_check_state/sensor_values/flow_meter1
+    heatpump_dhw: calculated_values/heatpump_dhw
+    heatpump_ch: calculated_values/heatpump_ch
+    heatpump_dhwT: system_check_state/sensor_values/indoor_unit_dhw_tank_temperature
+    heatpump_dhwTargetT: calculated_values/dhw_target_temperature
+    immersion_elec: calculated_values/immersion_elec
+    heatpump_bufferT: system_check_state/sensor_values/indoor_unit_supply_temperature
+    energy_balance: system_check_state/energy_balance/energy_balance
+  minimal_plus_and_energy_balance:
+    heatpump_elec: system_check_state/energy_calculation/current_electrical_power_w
+    heatpump_heat: calculated_values/heating_power
+    heatpump_flowT: system_check_state/sensor_values/outdoor_unit_supply_temperature
+    heatpump_returnT: system_check_state/sensor_values/outdoor_unit_return_temperature
+    heatpump_outsideT: system_check_state/sensor_values/outdoor_unit_ambient_temperature
+    heatpump_roomT: system_check_state/sensor_values/indoor_unit_room_temperature_zone1
+    heatpump_targetT: system_check_state/calculated_setpoints/temp_room1
+    heatpump_flowrate: system_check_state/sensor_values/flow_meter1
+    heatpump_dhw: calculated_values/heatpump_dhw
+    heatpump_ch: calculated_values/heatpump_ch
+    heatpump_dhwT: system_check_state/sensor_values/indoor_unit_dhw_tank_temperature
+    heatpump_dhwTargetT: calculated_values/dhw_target_temperature
+    immersion_elec: calculated_values/immersion_elec
+    energy_balance: system_check_state/energy_balance/energy_balance
+  verbose:
+    heatpump_elec: system_check_state/energy_calculation/current_electrical_power_w
+    heatpump_heat: calculated_values/heating_power
+    heatpump_flowT: system_check_state/sensor_values/outdoor_unit_supply_temperature
+    heatpump_returnT: system_check_state/sensor_values/outdoor_unit_return_temperature
+    heatpump_outsideT: system_check_state/sensor_values/outdoor_unit_ambient_temperature
+    heatpump_roomT: system_check_state/sensor_values/indoor_unit_room_temperature_zone1
+    heatpump_targetT: system_check_state/calculated_setpoints/temp_room1
+    heatpump_flowrate: system_check_state/sensor_values/flow_meter1
+    heatpump_dhw: calculated_values/heatpump_dhw
+    heatpump_ch: calculated_values/heatpump_ch
+    heatpump_dhwT: system_check_state/sensor_values/indoor_unit_dhw_tank_temperature
+    heatpump_dhwTargetT: calculated_values/dhw_target_temperature
+    immersion_elec: calculated_values/immersion_elec
+    heatpump_bufferT: system_check_state/sensor_values/indoor_unit_supply_temperature
+    heatpump_isDefrosting: system_check_state/megmet_status/outdoor_unit_defrosting
+    outdoor_unit_inner_coil_temperature: system_check_state/sensor_values/outdoor_unit_inner_coil_temperature
+    electrical_energy_cum_wh: system_check_state/energy_calculation/electrical_energy_cum_wh
+    water_energy_cum_wh: system_check_state/energy_calculation/water_energy_cum_wh
+    voltage_phase0: system_check_state/energy_calculation/voltage_phase0
+    current_phase0: system_check_state/energy_calculation/current_phase0
+    voltage_phase1: system_check_state/energy_calculation/voltage_phase1
+    current_phase1: system_check_state/energy_calculation/current_phase1
+    voltage_phase2: system_check_state/energy_calculation/voltage_phase2
+    current_phase2: system_check_state/energy_calculation/current_phase2
+    cop_now: system_check_state/energy_calculation/cop_now
+    energy_balance: system_check_state/energy_balance/energy_balance
+    ambient_temp_average1h: system_check_state/heating_mode/ambient_temp_avarage1h
+    ambient_temp_average3h: system_check_state/heating_mode/ambient_temp_avarage3h
+    ambient_temp_average24h: system_check_state/heating_mode/ambient_temp_avarage24h
+    calculated_setpoints_supply: system_check_state/calculated_setpoints/supply
+    calculated_setpoints_supply_zone1: system_check_state/calculated_setpoints/supply_zone1
+    megmet_compressor_limit_percent_calculated: system_check_state/megmet_status/compressor_limit_percent_calculated
+    megmet_ac_input_voltage: system_check_state/megmet_status/ac_input_voltage
+    megmet_ac_input_current: system_check_state/megmet_status/ac_input_current
+    megmet_compressor_frequency_limit: system_check_state/megmet_status/compressor_frequency_limit
+    megmet_eev_step: system_check_state/megmet_status/eev_step
+    megmet_evaporator_coil_temperature: system_check_state/megmet_status/evaporator_coil_temperature
+    megmet_gas_discharge_temperature: system_check_state/megmet_status/gas_discharge_temperature
+    megmet_gas_return_temperature: system_check_state/megmet_status/gas_return_temperature
+    megmet_evaporator_pressure: system_check_state/megmet_status/evaporator_pressure
+    megmet_condenser_pressure: system_check_state/megmet_status/condenser_pressure
+    megmet_condensing_temperature: system_check_state/megmet_status/condensing_temperature
+    megmet_evaporating_temperature: system_check_state/megmet_status/evaporating_temperature
+    megmet_inner_coil_temperature: system_check_state/megmet_status/inner_coil_temperature
+    megmet_requested_state: system_check_state/megmet_status/requested_state
+    megmet_compressor_need_percent_calculated: system_check_state/megmet_status/compressor_need_percent_calculated
+    megmet_current_operation_mode: system_check_state/megmet_status/current_operation_mode
+    megmet_compressor_running_speed: system_check_state/megmet_status/compressor_running_speed
+    megmet_dc_fan_speed_limit: system_check_state/megmet_status/dc_fan_speed_limit
+    megmet_dc_fan1_running_speed: system_check_state/megmet_status/dc_fan1_running_speed
+    megmet_dc_fan2_running_speed: system_check_state/megmet_status/dc_fan2_running_speed
+    flow_optimization_min_pump_speed: system_check_state/flow_optimization/min_pump_speed
+    
