@@ -1,11 +1,18 @@
+## Description
+
+This is a lightweight application which used pyairahome libary to pull Aira heatpump performance data via BLE and export to one or more instances of Emoncms.
+
+Each instances may have different mappings for attributes, which can be useful when one has a local and cloud running instances.
+
+
 ## Requirements
 
-This has been tested on
+This has been **only** been tested on
 
 * Raspberry Pi 4 Model B
 * Ubuntu 24.04
 
-EMONCMS instance is required, this can either be hosted locally (free) or https://emoncms.org/ (paid).
+Emoncms instance is required, this can either be hosted locally (free) or https://emoncms.org/ (paid).
 
 ## Usage
 
@@ -21,15 +28,40 @@ sudo systemctl enable bluetooth
 
 ### Edit configuration
 
-Edit docker-compose.yml and edit/populate the following
+Copy example config to `config/airatoemoncms.yml`
 
-* AIRA_UUID
-* AIRA_DHW_TARGET_TEMP
-* EMONCMS_URL (only if using local server)
-* EMONCMS_APIKEY (this is the read/write API key)
+```bash
+cp config/airatoemoncms.yml.example config/airatoemoncms.yml
+```
+
+Edit `config/airatoemoncms.yml`
+
+The minimal configuration which must be changed is
+
+* dhw_target_temp
+* aira_uuid
+* Emoncms api_key
+
+One can change the attribute filter for each destination to export additional fields. Useful filters are
+
+* minimal
+* minimal_plus_buffer
+* minimal_plus_buffer_and_energy_balance
+* minimal_plus_energy_balance
+* verbose
+
+### Aira UUID
+
+If you do not know your Aira UUID, set `SCAN` as `aira_uuid` and the results will be written to `logs/airatoemoncms.log`
+
 
 ### Build and run 
 
 ```bash
 sudo docker-compose up --build -d
 ```
+
+Newer versions would be `docker compose` but example assumes default package in Ubuntu 24.04.
+
+## Disclaimer
+
