@@ -9,8 +9,8 @@ Each instances may have different mappings for attributes, which can be useful w
 
 This has been **only** been tested on
 
-* Raspberry Pi 4 Model B
-* Ubuntu 24.04
+- Raspberry Pi 4 Model B
+- Ubuntu 24.04
 
 Emoncms instance is required, this can either be hosted locally (free) or https://emoncms.org/ (paid).
 
@@ -38,17 +38,17 @@ Edit `config/airatoemoncms.yml`
 
 The minimal configuration which must be changed is
 
-* dhw_target_temp
-* aira_uuid
-* Emoncms api_key
+- dhw_target_temp
+- aira_uuid
+- Emoncms api_key
 
 One can change the attribute filter for each destination to export additional fields. Useful filters are
 
-* minimal
-* minimal_plus_buffer
-* minimal_plus_buffer_and_energy_balance
-* minimal_plus_energy_balance
-* verbose
+- minimal
+- minimal_plus_buffer
+- minimal_plus_buffer_and_energy_balance
+- minimal_plus_energy_balance
+- verbose
 
 ### Aira UUID
 
@@ -65,6 +65,14 @@ Newer versions would be `docker compose` but example assumes default package in 
 
 ### Updates
 
+If configuration is changed, either docker-compose.yml or airatoemoncms.yml, load new state with.
+
+
+```bash
+ sudo docker-compose down
+sudo docker-compose up -d
+```
+
 If app is updated, rebuild the container as follows.
 
 ```bash
@@ -72,9 +80,13 @@ If app is updated, rebuild the container as follows.
  sudo docker-compose up --build --remove-orphans -d
 ```
 
+### Logs
+
+Logs are written to `logs/airatoemoncms.log`
+
 ## Disclaimer
 
-### The app uses pyairahome library with the following disclaimer
+### This app uses pyairahome library with the following disclaimer
 
 **PyAiraHome** is an independent, open-source software library developed for interacting with Aira Home heat pumps via their app gRPC APIs and Bluetooth Low Energy protocols. This project is **not affiliated with, endorsed by, sponsored by, or associated with** Aira Home or any of its subsidiaries, affiliates, or partners.
 
@@ -91,4 +103,11 @@ If app is updated, rebuild the container as follows.
 
 ### This app
 
-dgsfdg
+In addition to the disclaimer above.
+
+- This App is **not an official product** of Aira Home
+- Use of this App does **not imply any compatibility, support, or approval** from Aira Home
+- All trademarks, service marks, and company names mentioned herein are the **property of their respective owners**
+- **Use of this App is at your own risk** - I'm not responsible for any damages, malfunctions, warranty voids, or issues arising from its use
+- This software is provided **"AS IS"** without warranty of any kind, express or implied
+- No proprietary code, trade secrets, or copyrighted materials from Aira Home have been used in the development of this App.
