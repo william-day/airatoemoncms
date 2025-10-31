@@ -69,7 +69,7 @@ If configuration is changed, either docker-compose.yml or airatoemoncms.yml, loa
 
 
 ```bash
- sudo docker-compose down
+sudo docker-compose down
 sudo docker-compose up -d
 ```
 
