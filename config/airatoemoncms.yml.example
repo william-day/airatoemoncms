@@ -1,6 +1,6 @@
 settings:
   dhw_target_temp: 55  # changeme - populate with DHW target temp as configured in Aira app
-  aira_uuid: SCAN  # changeme - populate with Aira Heat Pump UUI
+  aira_uuid: SCAN  # changeme - populate with Aira Heat Pump UUID
   scan_interval: 10  # in seconds
   retries_before_restart: 5
   

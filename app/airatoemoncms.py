@@ -12,6 +12,8 @@ LOGLEVEL = os.environ.get('AIRATOEMONCMS_LOGLEVEL', 'INFO').upper()
 CONFIG_FILEPATH = '/config/airatoemoncms.yml'
 LOGS_FILEPATH = '/logs/airatoemoncms.log'
 
+# We don't want to continue heat calcs if heatpump is not running for a while
+heatpump_hold_running = 0
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(
@@ -82,19 +84,15 @@ def calc_heatpump_heat(deltaT, flowRate):
 
 
 def enrich_state(original_state, dhw_target_temp):
+    global heatpump_hold_running
+
     enriched_state = original_state.copy()
 
     deltaT = original_state['system_check_state']['sensor_values']['outdoor_unit_supply_temperature'] - original_state['system_check_state']['sensor_values']['outdoor_unit_return_temperature']
     flowRate = original_state['system_check_state']['sensor_values']['flow_meter1']
 
     enriched_state['calculated_values'] = {}
-
-    # When COP is very low, assume heatpump not running. This avoids spikes when P0 is running but heatpump is off
-    # P0 runs constantly when outdoor temp is low to stop freezing
-    if original_state['system_check_state']['energy_calculation']['cop_now'] > 0.001:
-        enriched_state['calculated_values']['heating_power'] = calc_heatpump_heat(deltaT, flowRate)
-    else:
-        enriched_state['calculated_values']['heating_power'] = 0
+    enriched_state['calculated_values']['heating_power'] = calc_heatpump_heat(deltaT, flowRate)
 
     # In theory the immmersion heater can also do central heating but unlikely
     enriched_state['calculated_values']['immersion_elec'] = 0
@@ -113,6 +111,18 @@ def enrich_state(original_state, dhw_target_temp):
             heatpump_ch = 1
     enriched_state['calculated_values']['heatpump_dhw'] = heatpump_dhw
     enriched_state['calculated_values']['heatpump_ch'] = heatpump_ch
+    
+    # Simple hold counter to avoid spikes when heatpump stops by P0 is running
+    if heatpump_dhw or heatpump_ch:
+        heatpump_hold_running = 10
+    else:
+        heatpump_hold_running -= 1
+        if heatpump_hold_running < 0:
+            heatpump_hold_running = 0
+
+    # If heatpump not running for 10 scan intervals, zero heating power
+    if not heatpump_hold_running:
+        enriched_state['calculated_values']['heating_power'] = 0
 
     # Too lazy to pull this from different BLE call, so just use configured value
     enriched_state['calculated_values']['dhw_target_temperature'] = dhw_target_temp
