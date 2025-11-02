@@ -166,10 +166,12 @@ def main():
             start_scan = time.time()
             try:
                 aira_state = aira.ble.get_system_check_state()
-                logger.debug(f"AIRA raw data: {json.dumps(aira_state)}")
+                # default=str to handle any non-serializable objects
+                logger.debug(f"AIRA raw data: {json.dumps(aira_state, default=str)}")
 
                 aira_enriched_state = enrich_state(aira_state, config['settings']['dhw_target_temp'])
-                logger.debug(f"AIRA enriched data: {json.dumps(aira_enriched_state)}")
+                # default=str to handle any non-serializable objects
+                logger.debug(f"AIRA enriched data: {json.dumps(aira_enriched_state, default=str)}")
 
                 for dest in config['destination']:
                     try:
