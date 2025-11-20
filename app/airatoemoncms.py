@@ -77,9 +77,6 @@ def upload_to_emoncms(aira_enriched_state, destination, export_rules):
 
 def calc_heatpump_heat(deltaT, flowRate):
     heat = deltaT * 4184 * flowRate / 60 # Watts
-    # avoid negative spikes
-    if heat < 0:
-        heat = 0
     return heat
 
 
